@@ -1,0 +1,352 @@
+bit stuffing
+
+package com.company;
+import java.util.*;
+
+public class bit_stuffing {
+    public static void main( String[] args){
+        Scanner sc=new Scanner(System.in);
+        String s=sc.nextLine();
+        s=s.replaceAll("11111","111110");
+        System.out.println(s);
+    }
+}
+
+
+
+
+
+
+
+byte stuffing
+
+package com.company;
+import java.util.*;
+public class byte_stuffing {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("enter the string: ");
+        String s=sc.nextLine();
+        String new_str="";
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='e' || s.charAt(i)=='f'){
+                new_str=new_str+'e'+s.charAt(i);
+            }
+            else{
+                new_str=new_str+s.charAt(i);
+            }
+        }
+        System.out.println(new_str);
+    }
+}
+
+
+
+
+
+
+
+DVR
+
+#include<stdio.h> 
+#include<iostream> 
+using namespace std;
+struct node
+{
+unsigned dist[6]; unsigned from[6];
+}DVR[10];
+int main()
+{
+cout<<"\n\n-------------------- Distance Vector Routing Algorithm	";
+int costmat[6][6]; 
+int nodes, i, j, k;
+cout<<"\n\n Enter the number of nodes : "; 
+cin>>nodes; //Enter the nodes
+cout<<"\n Enter the cost matrix: \n";
+for (i = 0; i < nodes; i++)
+{
+for (j = 0; j < nodes; j++)
+{
+cin>>costmat[i][j]; 
+costmat[i][i] = 0;
+DVR[i].dist[j] = costmat[i][j]; //initialise the distance equal to cost matrix DVR[i].from[j] = j;
+}
+}
+for(i = 0; i < nodes; i++) //We choose arbitrary vertex k and we calculate the
+//direct distance from the node i to k using the cost matrix and add the distance from k to node j
+
+for(j = i+1; j < nodes; j++) 
+for(k = 0; k < nodes; k++)
+if(DVR[i].dist[j] > costmat[i][k] + DVR[k].dist[j])
+{ //We calculate the minimum distance DVR[i].dist[j] = DVR[i].dist[k] + DVR[k].dist[j]; DVR[j].dist[i] = DVR[i].dist[j];
+DVR[i].from[j] = k;
+DVR[j].from[i] = k;
+}
+for(i = 0; i < nodes; i++)
+{
+cout<<"\n\n For router: "<<i+1; for (j = 0; j < nodes; j++)
+cout<<"\t\n node "<<j+1<<" via "<<DVR[i].from[j]+1<<" Distance "<<DVR[i].dist[j];
+}
+cout<<" \n\n "; return 0;
+ 
+}
+
+
+
+
+
+
+leaky bucket
+
+//leaky bucket
+
+package com.company;
+import java.util.*;
+public class temp {
+    public static void main(String[] args){
+        int capacity=4;
+        int rate=3;
+        int remaining=0;
+        int trackcapacity=0;
+
+        Scanner sc=new Scanner(System.in);
+        System.out.println("enter the no of packets : ");
+        int no_of_packets=sc.nextInt();
+
+        int [] packets=new int[no_of_packets];
+        System.out.println("enter the packets : ");
+        for(int i=0;i<packets.length;i++){
+            packets[i]=sc.nextInt();
+        }
+
+
+        System.out.println("clock"+"\t"+"packets"+"\t"+"Accept"+"\t"+"send"+"\t"+"remaining");
+        for(int i=0;i<packets.length;i++){
+            if(packets[i]>capacity){
+                if(trackcapacity<rate){
+                    remaining=0;
+                    System.out.println((i+1)+"\t\t"+packets[i]+"\t\t"+"*"+"\t\t"+trackcapacity+"\t\t"+remaining);
+                    capacity=capacity+trackcapacity;
+                    trackcapacity=0;
+                }
+                else{
+                    remaining=trackcapacity-rate;
+                    System.out.println((i+1)+"\t\t"+packets[i]+"\t\t"+"*"+"\t\t"+rate+"\t\t"+remaining);
+                    capacity=capacity+rate;
+                    trackcapacity=trackcapacity-rate;
+                }
+            }
+            else if(packets[i]<=capacity){
+                capacity=capacity-packets[i];
+                trackcapacity=trackcapacity+packets[i];
+
+                if(trackcapacity<rate){
+                    remaining=0;
+                    System.out.println((i+1)+"\t\t"+packets[i]+"\t\t"+packets[i]+"\t\t"+trackcapacity+"\t\t"+remaining);
+                    capacity=capacity+trackcapacity;
+                    trackcapacity=0;
+                }
+                else{
+                    remaining=trackcapacity-rate;
+                    System.out.println((i+1)+"\t\t"+packets[i]+"\t\t"+packets[i]+"\t\t"+rate+"\t\t"+remaining);
+                    trackcapacity=trackcapacity-rate;
+                    capacity=capacity+rate;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+CRC transmitter
+
+
+//at transmitted side
+
+package com.company;
+import java.util.*;
+
+public class CRC {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("enter the data: ");
+        String data=sc.nextLine();
+        System.out.println("enter the generator: ");
+        String gen=sc.nextLine();
+
+        //creating array of both data and generator
+
+        int [] dataarray=new int[data.length()+gen.length()-1];
+        int [] genarray=new int[gen.length()];
+
+        //putting values into array
+
+        for(int i=0;i<data.length();i++){
+            dataarray[i]=Integer.parseInt(data.charAt(i)+"");
+        }
+
+        for(int i=0;i<gen.length();i++){
+            genarray[i]=Integer.parseInt(gen.charAt(i)+"");
+        }
+
+        //calculation of CRC
+        for(int i=0;i<data.length();i++){
+            if(dataarray[i]==1){
+                for(int j=0;j<genarray.length;j++){
+                    dataarray[i+j]^=genarray[j];
+                }
+            }
+        }
+
+        // now sending data become
+
+        for(int i=0;i<data.length();i++){
+            dataarray[i]=Integer.parseInt(data.charAt(i)+"");
+        }
+
+
+        //printing values
+        System.out.println("output is: ");
+        System.out.println("data to be send is : "+data);
+        System.out.println("generator is : "+gen);
+
+        // printing remainder
+        System.out.print("remainder is : ");
+        for(int i=dataarray.length-gen.length()+1;i<dataarray.length;i++){
+            System.out.print(dataarray[i]);
+        }
+        System.out.println();
+        System.out.println("transmitted data is: ");
+        for(int i:dataarray){
+            System.out.print(i);
+        }
+    }
+}
+
+
+
+CRC receiver
+
+
+package com.company;
+import java.util.*;
+
+public class CRCReceiver {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("enter the received data : ");
+        String recdata=sc.nextLine();
+        System.out.println("enter the generator: ");
+        String gen=sc.nextLine();
+
+        int [] recdataary=new int[recdata.length()];
+        int [] genarray=new int[gen.length()];
+
+        //putting value in arrays
+
+        for(int i=0;i<recdataary.length;i++){
+            recdataary[i]=Integer.parseInt(recdata.charAt(i)+"");
+        }
+
+        for(int i=0;i<gen.length();i++){
+            genarray[i]=Integer.parseInt(gen.charAt(i)+"");
+        }
+
+        // calucation of CRC
+        for(int i=0;i<recdata.length();i++){
+            if(recdataary[i]==1 && i!=recdata.length()-1){
+                for(int j=0;j<genarray.length;j++){
+                    recdataary[i+j]^=genarray[j];
+                }
+            }
+        }
+
+        System.out.println("received data is : "+recdata);
+        System.out.println("genertor is : "+gen);
+
+        //printing remainder
+        System.out.print("remainder is : ");
+        for(int i=recdataary.length-gen.length()+1;i<recdataary.length;i++){
+            System.out.print(recdataary[i]);
+        }
+        System.out.println();
+
+        //checking remainder is zero or not
+        boolean b=true;
+        for(int i=0;i<recdataary.length;i++){
+            if(recdataary[i]==1){
+                b=false;
+                break;
+            }
+        }
+        if(b){
+            System.out.println("NO ERROR");
+        }
+        else{
+            System.out.println("ERROR FOUND");
+        }
+    }
+}
+
+
+
+
+
+token bucket
+
+
+from time import time
+
+class TokenBucket(object):
+    """An implementation of the token bucket algorithm.
+    
+    >>> bucket = TokenBucket(80, 0.5)
+    >>> print bucket.consume(10)
+    True
+    >>> print bucket.consume(90)
+    False
+    """
+    def __init__(self, tokens, fill_rate):
+        """tokens is the total tokens in the bucket. fill_rate is the
+        rate in tokens/second that the bucket will be refilled."""
+        self.capacity = float(tokens)
+        self._tokens = float(tokens)
+        self.fill_rate = float(fill_rate)
+        self.timestamp = time()
+
+    def consume(self, tokens):
+        """Consume tokens from the bucket. Returns True if there were
+        sufficient tokens otherwise False."""
+        if tokens <= self.tokens:
+            self._tokens -= tokens
+        else:
+            return False
+        return True
+
+    def get_tokens(self):
+        if self._tokens < self.capacity:
+            now = time()
+            delta = self.fill_rate * (now - self.timestamp)
+            self._tokens = min(self.capacity, self._tokens + delta)
+            self.timestamp = now
+        return self._tokens
+    tokens = property(get_tokens)
+
+if __name__ == '__main__':
+    from time import sleep
+    bucket = TokenBucket(80, 1)
+    print "tokens =", bucket.tokens
+    print "consume(10) =", bucket.consume(10)
+    print "consume(10) =", bucket.consume(10)
+    sleep(1)
+    print "tokens =", bucket.tokens
+    sleep(1)
+    print "tokens =", bucket.tokens
+    print "consume(90) =", bucket.consume(90)
+    print "tokens =", bucket.tokens
+
+
+
+
